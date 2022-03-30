@@ -2,6 +2,8 @@ const cards = document.querySelectorAll(".card");
 const startButton = document.querySelector(".start");
 const number = document.querySelector(".number");
 const resetButton = document.querySelector(".reset");
+const gameBegun = document.querySelector(".game-started");
+const gameFinished = document.querySelector(".game-finished");
 let firstCard, secondCard;
 let isFlipped = false;
 let lockBoard = false;
@@ -28,6 +30,10 @@ function flipCard() {
     } else {
       unflipCards();
     }
+  }
+
+  if (matchingPairs === 8) {
+    gameFinished.style.display = "block";
   }
 }
 
@@ -60,10 +66,6 @@ function shuffleDeck() {
   });
 }
 
-cards.forEach((card) => {
-  card.addEventListener("click", flipCard);
-});
-
 function resetGame() {
   {
     cards.forEach((card) => {
@@ -71,12 +73,22 @@ function resetGame() {
     });
     matchingPairs = 0;
     number.textContent = matchingPairs;
+    gameFinished.style.display = "none";
 
     gameStarted = false;
   }
 }
 
+cards.forEach((card) => {
+  card.addEventListener("click", flipCard);
+});
+
 startButton.addEventListener("click", () => {
+  if (gameStarted === true) return;
+  gameBegun.style.display = "block";
+  setTimeout(() => {
+    gameBegun.style.display = "none";
+  }, 2000);
   gameStarted = true;
   shuffleDeck();
 });
